@@ -5,7 +5,7 @@ const uploadRouter = express.Router();
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, 'uploads/');
+    cb(null, 'http://sanjusk.com.s3-website.ap-south-1.amazonaws.com/uploads/');
   },
   filename(req, file, cb) {
     cb(null, `${Date.now()}.png`);
