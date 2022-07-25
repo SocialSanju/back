@@ -2,22 +2,11 @@ import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import Product from '../models/productModel.js';
 import User from '../models/userModel.js';
-import multer from 'multer';
+import upload from '../middelware/fileUpload.js';
 import { isAdmin, isAuth, isSellerOrAdmin } from '../utils.js';
+import uploadFile from '../middelware/fileS3Upload.js';
 
 const productRouter = express.Router();
-
-//Storage
-const Storage = multer.diskStorage({
-  destination: 'uploads',
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
-
-const upload = multer({
-  storage:Storage
-}).single('testImage');
 
 productRouter.get(
   '/',
@@ -146,23 +135,29 @@ productRouter.post(
 
 productRouter.post(
   '/create',
+  upload.single('image'),
   expressAsyncHandler(async (req, res) => {
-    const product = new Product({
-      name: req.body.name,
-      image: req.body.image,
-      price: req.body.price,
-      category: req.body.category,
-      brand: req.body.brand,
-      countInStock: req.body.countInStock,
-      rating: req.body.rating,
-      numReview: req.body.numReview,
-      description: req.body.description,
-    });
-   
-    const createdProduct = await product.save();
-    res
-    .status(201)
-    .send({ message: 'New Product Created', product: createdProduct });
+    const { name , price, image, category, brand, countInStock, rating, numReview, description } = req.body;
+    if(req.file) {
+      let ext = req.file.originalname;
+      const uploadFileName = ext;
+      uploadFile(req.file,req.body.type,uploadFileName);
+      image = process.env.S3URL +'uploads/'+req.body.type +'/'+ uploadFileName;
+    } 
+    try {
+      const product = new Product({
+          name, price,  image, category, brand,
+          countInStock, rating, numReview, description
+          });
+           
+          const createdProduct = await product.save();
+          res
+          .status(201)
+          .send({ message: 'New Product Created', product: createdProduct });
+  } catch (err) {
+      throw err;
+  }
+    
   })
 );
 
