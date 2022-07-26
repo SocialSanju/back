@@ -9,6 +9,7 @@ import productRouter from './routers/productRouter.js';
 import userRouter from './routers/userRouter.js';
 import orderRouter from './routers/orderRouter.js';
 import uploadRouter from './routers/uploadRouter.js';
+import authorRouter from './routers/authorRouter.js';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ mongoose .connect(DATABASEURL, {
 
 app.use('/api/uploads', uploadRouter);
 app.use('/api/users', userRouter);
+app.use('/api/authors', authorRouter)
 app.use('/api/products', productRouter);
 app.use('/api/orders', orderRouter);
 app.get('/api/config/google', (req, res) => {
