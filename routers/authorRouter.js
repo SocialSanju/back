@@ -5,8 +5,8 @@ import Author from '../models/authorModel.js';
 const authorRouter = express.Router();
 
 authorRouter.get('/', expressAsyncHandler(async(req, res) => {
-  const sample = await Author.find({});
-  res.send(sample);
+  const authors = await Author.find({});
+  res.send(authors);
 })
 );
 
