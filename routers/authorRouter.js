@@ -4,7 +4,7 @@ import Author from '../models/authorModel.js';
 
 const authorRouter = express.Router();
 
-authorRouter.get('/all', expressAsyncHandler(async(req, res) => {
+authorRouter.get('/', expressAsyncHandler(async(req, res) => {
   const sample = await Author.find({});
   res.send(sample);
 })
