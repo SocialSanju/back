@@ -10,6 +10,7 @@ import userRouter from './routers/userRouter.js';
 import orderRouter from './routers/orderRouter.js';
 import uploadRouter from './routers/uploadRouter.js';
 import authorRouter from './routers/authorRouter.js';
+import { generateUploadURL } from './s3.js';
 
 dotenv.config();
 
@@ -53,6 +54,13 @@ app.get('*', (req, res) =>
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
+
+app.use(express.static('http://sanjusk.com.s3-website.ap-south-1.amazonaws.com/'))
+
+app.get('/s3Url', async (req, res) => {
+  const url = await generateUploadURL()
+  res.send({url})
+})
 
 const port = process.env.PORT || 5000;
 
