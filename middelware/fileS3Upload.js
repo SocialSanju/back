@@ -1,8 +1,8 @@
 import AWS from "aws-sdk";
 import fs from 'fs';
 const s3 = new AWS.S3({
-    accessKeyId: 'AKIAV4F7GLMEUI5V44AZ',
-    secretAccessKey: '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'
+    accessKeyId: 'AKIAV4F7GLMEUDNR2NW2',
+    secretAccessKey: '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'
 });
 
 const uploadFile = (file, path, fileName) => {
