@@ -55,12 +55,13 @@ app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
 
-app.use(express.static('http://sanjusk.com.s3-website.ap-south-1.amazonaws.com/'))
-
-app.get('/s3Url', async (req, res) => {
+app.get('/s3Url',async(req,res)=>{
   const url = await generateUploadURL()
   res.send({url})
 })
+
+
+app.use(express.static("uploads"));
 
 const port = process.env.PORT || 5000;
 
